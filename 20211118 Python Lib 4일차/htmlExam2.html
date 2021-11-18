@@ -1,0 +1,125 @@
+<!-- html:5 => ctrl+sapceNBar -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- css 영역 생성
+        >> head 영역의 style 태그 
+            <style>
+            선택자 { 속성:값; }
+            </style>
+     -->
+     <style>
+        /* css 영역 */
+        /* 선택자 { 속성:값;} 
+            >> 태그 선택자 
+            : 현재 html 페이지의 임의 태그 전체의 디자인 적용 
+            : 적용과정이 필요없고 모든 태그에 디자인 자동 적용 
+            태그명 { 속성1:값1; 속성2:값2; ... }
+         */
+        /* h2 태그 => 중앙정렬, 색상 적용 */
+        /* text-align => 정렬 */
+    h2 { color:deepskyblue; text-align: center;}
+
+    /*
+      >> 클래스 선택자 
+      : html 요소중에서 필요한 부분에 직접 적용가능. 
+      : 중복 적용 가능  
+
+      Step1 > 정의 
+
+        .클래스이름 { 속성1:값1; 속성2:값2; ... }
+
+
+      Step2> 적용
+
+      <태그명 class="클래스이름"> 
+    */
+    .style1 { color:red; font-size:2em;}
+    .style2 { color:blue; font-size:3em;}
+    
+    /*
+      >> 아이디 선택자 
+      : html 요소중에서 필요한 부분에 직접 적용가능. 
+      : 문서에서 한번만 디자인 적용 가능  
+      Step1 > 정의 
+        #아이디이름 { 속성1:값1; 속성2:값2; ... }
+      Step2> 적용
+        <태그명 id="아이디이름">   
+    
+    */
+    #box1 { width:100px; 
+            height:100px; 
+            background-color: crimson;
+            color:white;
+          }
+
+    #box2 { width:200px; 
+            height:200px; 
+            background-color: darkslategrey;
+            color:white;
+          }
+    /* 
+    >> 자손 선택자 
+        특정 부모 요소 안의 삽입된 태그 접근 
+        부모요소선택자 자손선택 { 
+            속성1:값1; 속성2:값2; ... }
+
+        >> 자식 선택자 
+        부모요소선택자>자식선택 { 
+            속성1:값1; 속성2:값2; ... }
+    */
+    /* #con1 안의 p 디자인 */
+    #con1 p {background-color: yellow;}
+    
+    /* #con1 안의 자식 span */
+    #con1 > span {background-color: red; color:white;}
+    
+    /* #con2 안의 p 태그 안의 자식 span */
+    #con2 > p > span {background-color: blue; color:white;}
+
+     </style>
+</head>
+<body>
+    <!-- 
+        // 인라인방식 
+        <html태그 style="css속성:값;">
+     -->
+    <h1 style="color: brown; font-size: 70px;">css</h1>
+    <h2>Hello world</h2>
+    <hr>
+        <!-- ul>li{목록$}*5 -->
+    <ul>
+        <li>목록1</li>
+        <li>목록2</li>
+        <li>목록3</li>
+        <li>목록4</li>
+        <li>목록5</li>
+    </ul>
+    <hr>
+    <div id="box1">box1</div>
+    <hr>
+    <div id="box2">box2</div>
+    <hr>
+    <div>box3</div>
+    <hr>
+    <!-- div#con$>(h3+p{문단$}*3) -->
+    <div id="con1">
+        <h3>con1</h3>
+        <p>문단1</p>
+        <p>문단2</p>
+        <p>문단3</p>
+        <span>Hello</span>
+    </div>
+    <hr>
+    <div id="con2">
+        <h3>con2</h3>
+        <p>문단1 <span>Hello</span></p>
+        <p>문단2 <span>Hello</span></p>
+        <p>문단3</p>
+    </div>
+</body>
+</html>
