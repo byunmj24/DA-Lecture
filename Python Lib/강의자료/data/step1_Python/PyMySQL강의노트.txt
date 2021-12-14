@@ -1,0 +1,367 @@
+#  mysql 설치 확인
+#  pymysql 파이썬 모듈 확인
+#  파이참에서 [File]-[Settings] 클릭후 [Project] 에서 pymysql 목록 확인
+#  레퍼런스 사이트  https://github.com/PyMySQL/PyMySQL/
+#  [Terminal] 탭을 클릭하고 명령 직접 입력
+#  pip list
+#  pymysql 목록 확인
+#  없으면 설치
+#  pip install pymysql
+
+# ================================
+# 테이블 조회
+
+# Step1 - 모듈 임포트
+import pymysql
+
+# Step2 - mysql의 계정의 특정 데이타베이스에 접속해서 연결 객체(conn) 생성
+
+conn = pymysql.connect( host = 'localhost',
+                        port=3306, # mysql 포트
+                        user='root', # 접속 계정
+                        password = '12345678', # 루트계정의 본인 비번
+                        db = 'world',  # 접속하고자 하는 데이타베이스명
+                        charset = 'utf8' )
+
+
+
+# Step3 - 커서(cursor) 객체 생성
+# 객체명 = 연결객체(conn).cursor()
+cursor = conn.cursor()
+
+# Step4 - sql 명령을 실행
+# 커서(cursor)객체.execute(sql명령문)
+# 테이블 조회
+cursor.execute('SELECT * FROM city LIMIT 10;')
+
+
+# Step5 - sql 실행 결과 저장
+# 변수명 = cursor.fetchall() / cursor.fetchone() / cursor.fetchmany(n)
+result = cursor.fetchall()
+print(result)
+for item in result:
+    print(item)
+
+# Step6 - 데이타베이스 종료
+conn.close()
+
+
+# =========================
+# cursor.fetchone() => 튜플
+# cursor.fetchall() => 2차원 튜플구조
+# cursor.fetchmany(size) => 2차원 튜플구조
+
+
+cursor.execute('SELECT Name, Population FROM city;')
+result = cursor.fetchone()
+result = cursor.fetchall()
+result = cursor.fetchmany(5)
+
+
+# =========================
+
+# 데이타베이스안에 테이블 생성 : 워크벤치 이용
+'''
+-- 데이타베이스 생성
+CREATE DATABASE testdb1;
+SHOW DATABASES;
+
+-- testdb1 접속
+-- bookTbl 테이블 생성
+-- id, title, writer, page, price
+USE testdb1;
+CREATE TABLE bookTbl (
+	id INTEGER NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    title TEXT NOT NULL,
+    writer VARCHAR(20) NOT NULL,
+    page INTEGER NOT NULL,
+    price INTEGER  NOT NULL
+);
+DESC bookTbl;
+
+
+# ===================================
+# 레코드 삽입 1 : 필드명 지정 X
+#  INSERT INTO 테이블명 VALUES(..,..,...);
+cursor.execute(''' INSERT INTO bookTbl
+                        VALUES(NULL, '점프투파이썬', '박응용', 500, 30000);
+                ''')
+# 데이타베이스 반영
+# conn.commit()
+
+
+# 레코드 삽입 2 : 필드명 지정 O
+#  INSERT INTO 테이블명 (필드명1,...)
+#                       VALUES(값1,..,...);
+# sql변수 = '''  INSERT INTO 테이블명 (필드명1,...)
+#                   VALUES(%s, .... ); '''
+# cursor.execute(sql변수, (값1, ... ))
+
+sql = 'INSERT INTO bookTbl(title, writer, page, price) VALUES (%s, %s, %s, %s);'
+cursor.execute(sql, ('이것이 MySQL이다','우재남',800,40000))
+cursor.execute(sql, ('이것이 JAVA다','김자바',700,50000))
+
+# 데이타베이스 반영
+# conn.commit()
+
+# 레코드 삽입 3 : 필드명 지정 O, 다중 레코드 삽입 방식
+
+#  INSERT INTO 테이블명 (필드명1,...)
+#                       VALUES(값1,..,...);
+
+# sql변수 = '''  INSERT INTO 테이블명 (필드명1,...)
+#                   VALUES(%s, .... ); '''
+
+# 레코드 데이타를 2차원 튜플로 저장
+# data = ( (값1, 값2 ...), (값1, 값2 ...), (값1, 값2 ...), (값1, 값2 ...) ...)
+
+# cursor.executemany( sql변수, data )
+
+sql = 'INSERT INTO bookTbl(title, writer, page, price) VALUES (%s, %s, %s, %s);'
+data = (    ('이것이 C','김C',800, 70000),
+            ('이것이 ORACLE','윤오라클',800, 6000),
+            ('머신러닝 핸드북','송머신',500, 55000)  )
+cursor.executemany(sql, data)
+# 데이타베이스 반영
+conn.commit()
+
+
+
+
+# ====================================
+# 레코드 수정
+#  UPDATE 테이블명 SET 컬럼명1 = 값1  WHERE 컬럼명2 = 값2
+
+# sql변수 = '''  UPDATE 테이블명
+#               SET 컬럼명1 = %s  WHERE 컬럼명2 = %s; '''
+# cursor.execute(sql변수, (값1, ... ))
+
+# buytbl_sample 테이블에서 1번 레코드의 상품명(prodName)을 수정하여라
+sql = '''  UPDATE buytbl_sample
+              SET prodname = %s  WHERE num = %s; '''
+cursor.execute(sql, ('백팩', 1))
+conn.commit()
+
+
+cursor.execute('SELECT * FROM buytbl_sample')
+result = cursor.fetchall()
+for item in result:
+    print(item)
+
+
+# ----------------------------
+#  레코드 삭제
+#  DELETE FROM 테이블명  WHERE 컬럼명 = 값
+
+# sql변수 = '''  DELETE FROM 테이블명
+#               WHERE 컬럼명 = = %s; '''
+# cursor.execute(sql변수, (값))
+
+# 데이타베이스 반영
+# conn.commit()
+
+# 데이타베이스 종료
+conn.close()
+
+# sample
+sql = '''
+        DELETE FROM buytbl_sample
+            WHERE num = %s
+      '''
+
+# cursor.execute(sql, (3))
+try:
+    cursor.execute(sql, (3))
+except Exception:
+    print('오류발생')
+
+conn.commit()
+
+# ====================================
+# 퀴즈 : Python - MySQL 연동 BookStore
+
+
+# Q0. 아래를 참조하여 bookTbl 테이블을 생성하고 샘플 레코드를 삽입하여라.
+
+'''
+# cursor.execute('drop table if exists bookTbl;')
+# cursor.execute('''
+#                 create table if not exists bookTbl
+#                 (
+#                     id int PRIMARY KEY not null AUTO_INCREMENT,
+#                     title text not null,
+#                     writer varchar(30) not null,
+#                     page int not null,
+#                     price int not null
+#                 );
+#                 ''')
+# cursor.execute(''' INSERT INTO bookTbl
+#                         VALUES(NULL, '점프투파이썬', '박응용', 500, 30000);
+#                 ''')
+# conn.commit()
+'''
+
+
+# Q1. 시작 화면을 아래를 참조하여 프로그래밍하고
+#   '0' 입력시 프로그램을 종료하도록 한다.
+1.목록보기 2.추가 3. 수정 4. 삭제  0. 종료
+ => 0
+프로그램 종료
+
+
+
+# Q2. 아래 화면을 참조하여 책 정보를 입력할 수 있도록
+# 프로그래밍하여라.
+
+
+1.목록보기 2.추가 3. 수정 4. 삭제  0. 종료
+ => 2
+--------------------
+레코드 삽입하기
+--------------------
+ 책 이름 => 어린왕자
+ 저자 => 생텍쥐베리
+ 페이지 수 => 300
+ 가격 => 15000
+
+레코드가 삽입되었습니다.
+
+
+
+# Q3. 아래 화면을 참조하여 책 목록을 출력할 수 있도록
+# 프로그래밍 하여라.
+
+1.목록보기 2.추가 3. 수정 4. 삭제  0. 종료
+ => 1
+--------------------
+       책 목록
+--------------------
+(1, '점프투파이썬', '박응용', 500, 30000)
+(2, '어린왕자', '생텍쥐베리', 300, 15000)
+
+
+
+# Q4. 아래 화면을 참조하여 책 내용을 수정할 수 있도록
+# 프로그래밍 하여라.
+
+
+# 샘플 1
+1.목록보기 2.추가 3. 수정 4. 삭제  0. 종료
+ => 3
+--------------------
+ 책 목록
+--------------------
+(1, '점프투파이썬', '박응용', 500, 30000)
+(2, '어린왕자', '생텍쥐베리', 300, 15000)
+
+ 수정할 책 번호는?   2
+--------------------
+1.책제목 :  어린왕자
+2.저자 :  생텍쥐베리
+3.페이지수 :  300
+4.가격 :  15000
+--------------------
+
+수정 사항 선택? (1.책제목  2.저자  3.페이지수  4.가격) .. 4
+가격을 입력하세요? 22000
+--------------------
+데이타가 수정되었습니다.
+--------------------
+1.책제목 :  어린왕자
+2.저자 :  생텍쥐베리
+3.페이지수 :  300
+4.가격 :  22000
+--------------------
+
+
+# 샘플 2
+1.목록보기 2.추가 3. 수정 4. 삭제  0. 종료
+ => 3
+--------------------
+ 책 목록
+--------------------
+(1, '점프투파이썬', '박응용', 500, 30000)
+(2, '어린왕자', '생텍쥐베리', 300, 15000)
+--------------------
+1.책제목 :  어린왕자
+2.저자 :  생텍쥐베리
+3.페이지수 :  300
+4.가격 :  22000
+--------------------
+
+수정 사항 선택? (1.책제목  2.저자  3.페이지수  4.가격) .. 1
+책 제목을 입력하세요? 어린왕자 특별판
+--------------------
+데이타가 수정되었습니다.
+--------------------
+1.책제목 :  어린왕자 특별판
+2.저자 :  생텍쥐베리
+3.페이지수 :  300
+4.가격 :  22000
+--------------------
+
+
+
+# Q5. 아래 화면을 참조하여 책 목록을 삭제할 수 있도록
+# 프로그래밍 하여라.
+
+1.목록보기 2.추가 3. 수정 4. 삭제  0. 종료
+ => 4
+--------------------
+ 책 목록
+--------------------
+(1, '점프투파이썬', '박응용', 500, 30000)
+(2, '어린왕자 특별판', '생텍쥐베리', 300, 22000)
+
+삭제할 책 번호는?   1
+
+데이타가 삭제되었습니다.
+
+
+
+
+# ====================================
+#  CSV 파일을 MySQL의 테이블로 등록하기 1
+
+#  csv 파일 => 데이타프레임 => MYSQL 테이블 생성 후 레코드 삽입
+# 1) csv 파일 => 데이타프레임
+# 2)
+# 데이타프레임.iterrows() + for 문 이용
+# MySQL 테이블로 등록
+
+
+# 레코드 삽입 sql
+sql = '''INSERT INTO population (state, population )
+            VALUES (%s, %s);'''
+
+for index, row in df_pop.iterrows():
+    cursor.execute(sql, (row.State, row.Population))
+
+conn.commit()
+
+
+
+# ====================================
+#  CSV 파일을 MySQL의 테이블로 등록하기 2
+
+# csv 파일 => 데이타프레임 => MYSQL 테이블
+# 판다스의 to_sql() 함수 이용
+# to_sql(테이블명, con=엔진.... )
+
+# (1)
+# sqlalchemy 설치
+pip install sqlalchemy
+
+# (2) csv 파일을 데이타프레임으로 생성
+
+# (3)
+# sqlalchemy 엔진 정보 생성
+# url = 'mysql+pymysql://아이디:패스워드@localhost:3306/데이타베이스명'
+url = 'mysql+pymysql://root:12345678@localhost:3306/testdb1'
+engine = create_engine(url)
+
+# (4) to_sql() 로 데이타베이스의 테이블로 등록
+df_bookBest.to_sql(name='bookBest', con=engine, if_exists='append', index=True)
+
+
+

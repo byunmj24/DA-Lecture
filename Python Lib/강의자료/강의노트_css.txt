@@ -1,0 +1,220 @@
+// CSS 란?
+-- 디자인 마크업 
+-- HTML 요소(글문단. 하이퍼링크. 이미지. 폼요소...)에 
+   디자인(여백, 정렬, 색상, 배치 ... ) 적용 
+-- Cascading Style Sheet
+-- 웹표준 
+   HTML(컨텐츠) 
+   CSS(디자인) 
+   JS(동적컨텐츠) 
+
+----------------------------- 
+
+// CSS의 종류 (삽입방식에 따른 분류) 
+- 인라인방식 
+- head 영역에 삽입 
+- 외장 방식 : 별도의 css 파일에 저장 
+  
+// 인라인방식 
+<html태그 style="css속성:값;">
+
+  >> CSS 적용방식 
+- 인라인방식 
+- head 영역의 style 태그 
+- 별도의 css 파일 연결방식 - 외장방식 
+
+>> head 영역의 style 태그 
+ <style>
+  선택자 { 속성:값; }
+ </style>
+
+//css 주석 
+ /* 설명  */
+
+>> CSS 선택자(Selector) 
+: HTML 태그의 디자인 적용 범위를 지정한다. 
+: 종류 
+- 태그 선택자 
+- 클래스 선택자 
+- 아이디 선택자
+
+- 전체 
+- 자식 
+- 자손 
+- 가상 (하이퍼링크, 폼) 
+- 순서 
+- 그룹  
+
+
+
+>> 태그 선택자 
+ : 현재 html 페이지의 임의 태그 전체의 디자인 적용 
+ : 적용과정이 필요없고 모든 태그에 디자인 자동 적용 
+
+ 태그명 { 속성1:값1; 속성2:값2; ... }
+
+
+>> 클래스 선택자 
+ : html 요소중에서 필요한 부분에 직접 적용가능. 
+ : 중복 적용 가능  
+
+ Step1 > 정의 
+
+  .클래스이름 { 속성1:값1; 속성2:값2; ... }
+
+
+ Step2> 적용
+
+  <태그명 class="클래스이름"> 
+
+
+
+>> 아이디 선택자 
+ : html 요소중에서 필요한 부분에 직접 적용가능. 
+ : 문서에서 한번만 디자인 적용 가능  
+ Step1 > 정의 
+  #아이디이름 { 속성1:값1; 속성2:값2; ... }
+ Step2> 적용
+  <태그명 id="아이디이름"> 
+
+
+>> 전체 선택자 
+
+ * { 속성1:값1; 속성2:값2; ... }
+ 
+: 문서 전체에 삽입된 모든 요소에 디자인 적용 
+: 초기화 (여백:padding, margin)
+* {margin:0; padding:0}
+
+
+/* 그룹 선택자 */
+: 같은 속성과 값을 적용할 때 사용 
+선택자1, 선택자2 { 속성:값 ... }
+
+
+
+>> 자손 선택자 
+ 특정 부모 요소 안의 삽입된 태그 접근 
+부모요소선택자 자손선택 { 
+    속성1:값1; 속성2:값2; ... }
+
+>> 자식 선택자 
+부모요소선택자>자식선택 { 
+    속성1:값1; 속성2:값2; ... }
+
+
+
+>> 순서 선택자 
+선택자:first-child
+선택자:last-child
+
+/* 부모요소를 기준으로 위치 선정 */
+선택자:nth-child(odd/even/숫자/수식)
+
+선택자:first-line 
+선택자:first-letter 
+
+선택자:first-of-type
+선택자:last-of-type
+
+/* 선택자를 기준으로 위치 선정 */
+선택자:nth-of-type(숫자)
+
+/* */
+
+
+
+
+
+-----------------------------
+// CSS 속성 
+
+color:글자색상값 
+background-color:배경색상값 
+
+색상값은?
+ #000000 ~ #FFFFFF (16진수)
+  black      white
+#FF0000  red
+#00FF00  green
+#0000FF  blue
+
+영문색상명 사용가능 
+  - https://www.w3schools.com/w3css/w3css_colors.asp
+
+
+font-size:글자크기 
+
+font-family:글꼴 '맑은 고딕'
+font-family:1글꼴,2글꼴...
+
+예) font-family:'맑은 고딕',굴림, console, arial;
+
+font-weight:bold,normal 진하게 
+font-style:italic 기울임꼴
+
+text-decoration:underline(밑줄), none(밑줄없음)
+
+line-height:숫자+단위(%), 줄간격
+letter-spacing:숫자+단위(px,em), 자간
+word-spacing:숫자+단위(px,em), 단어사이 간격 
+
+안쪽여백 
+padding:숫자px (상하좌우)
+padding:숫자1px 숫자2px (상하  좌우)
+padding:숫자1px 숫자2px 숫자3px 숫자4px (12시 3시 6시 9시)
+padding-left/right/top/bottom : 한쪽방향으로 안쪽 여백지정, 숫자px 
+
+목록문단 css 속성 
+list-style-type:none/square/disk/circle 리스트블렛표시 
+
+//--------------------------
+
+>> 박스모델 1
+
+ - 블록요소 기준 
+ - 가로크기
+   : width + border-left + border-right + padding-left + padding-right
+ 
+ - 세로크기
+   : height + border-top + border-bottom + padding-top + padding-bottom
+
+>> 박스모델 2
+  부모요소에 width/height 크기만으로 설정 
+  box-sizing:border-box
+
+  가로크기:width 
+  세로크기:height 
+
+//--------------------------
+
+// CSS 레이아웃 
+- float : 부유레이아웃
+- display
+- position 
+- columns
+
+
+ 
+float : 부유레이아웃
+: 부모 요소를 기준으로 해서 
+  왼쪽이나 오른쪽으로 배치 
+: 부유 레이아웃은 다음 형제요소에 영향력을 준다. 
+
+float:left/right
+clear:both 
+
+// display 속성을 이용한 레이아웃 
+
+display:block;
+인라인요소 => 블록요소 
+
+display:inline/inline-block
+블록요소 => 인라인요소 
+
+display:none;
+페이지에서 보이지 않게함 
+
+
+
+
