@@ -1,0 +1,227 @@
+# 웹수집 방법
+웹스크랩핑 : requests, urllib, bs4, selenium
+공공데이타 포털 제공 => csv, excel
+API 서비스 => 네이버, 카카오, 통계청, 공공데이타포털 (xml, json 지식 필요)
+판다스 금융라이브러리 (주식, 비트코인, 환율, 원자재....)
+
+
+# 웹데이타 수집 과정
+
+웹에 필요한 URL 요청 (관련 모듈 => requests, urllib)
+response 객체 => html 페이지
+파싱(bs4, selenium)
+리스트, 딕셔너리, 판다스의 데이타프레임 형태로 저장
+csv 파일로 저장하거나 sqlite 와 같은 데이타베이스에 저장
+
+# requests 
+pip list 명령으로 모듈 설치 확인
+터미널 이용해서 설치는 쥬피터노트북 홈페이지에서 
+[New]-[Terminal] pip intall requests
+셀에서 설치 !pip install requests
+모듈 임포트 import requests
+
+res = requests.get(url)
+res.headers
+html_str = res.text
+
+with open('output/yes24.html', 'w', encoding='ks_c_5601-1987') as f:
+    f.write(html_str)
+
+
+
+# 파싱(Parsing)
+
+가공되지 않은 데이타에서 원하는 정보를 추출하는 과정
+
+# BeautifulSoup
+외부 라이브러리
+pip list 명령으로 설치 확인 : beautifulsoup4
+없다면 설치
+https://www.crummy.com/software/BeautifulSoup/bs4/doc/index.html
+
+
+# 뷰티풀숩 임포트
+from bs4 import BeautifulSoup
+
+
+
+# BeautifulSoup을 이용한 작업 과정
+requests/urllib를 이용해서 url 요청 => response 객체 => html화 (텍스트나 바이트)
+html화된 자료 => 뷰티풀숩 객체화
+뷰티풀숩의 다양한 함수를 이용해서 자료변환(리스트나 딕셔너리등)
+csv 파일등로 저장 (판다스를 이용)
+
+
+# html화된 자료 => 뷰티풀숩 객체화
+BeautifulSoup(html변수 , 해석기 )
+해석기 : html.parser/html5/xml/lxml
+soup = BeautifulSoup(html_str, 'html.parser' )
+
+
+# 샘플 스크래핑 url 지정 
+url = 'http://pythonscraping.com/pages/warandpeace.html'
+
+
+# 도트(.)를 이용해서 요소 탐색
+부모요소 안에 자식 요소 조회 가능
+soup.태그1.태그2.태그3....
+요소안의 문자열 추출은 text/string 이용
+
+
+# next_sibling 를 이용한 요소 탐색
+다음 형제요소 탐색
+soup.태그.next_sibling
+
+# find_all(태그) => 리스트 형태
+soup.find_all('span')
+
+# find(태그)
+# 태그가 여러개일 경우에는 첫번째 태그만 반환 
+soup.find('p')
+
+# find(id=아이디명)
+soup.find(id='text').text
+
+# find(class_=클래스명)
+soup.find(class_='green')
+
+# 특정 태그의 속성값 출력
+get(속성명)
+soup.find(class_='green')
+
+
+# select() 와 select_one()
+select(선택자) => 리스트
+select_one(선택자) => 1개의 요소
+
+soup.select_one('.red')
+soup.select('#text > span.red')
+
+
+# 예제 
+영문 색상명 + 16진수색상값
+https://www.w3schools.com/colors/colors_names.asp
+
+
+# 예제 
+알렉사 사이트의 50위
+https://www.alexa.com/topsites
+
+
+# 예제 
+Yes24 베스트셀러 정보 저장하기
+http://www.yes24.com/Main/default.aspx
+
+
+# 퀴즈1 : 네이버 웹툰 인기순 정보 저장하기
+https://comic.naver.com/webtoon/weekday.nhn
+
+[인기급상승만화]-[인기순] 영역
+추출정보 = > 순위 / 웹툰제목 / 관련 URL
+
+
+# 퀴즈2. 요일별 웹툰
+url : https://comic.naver.com/webtoon/weekday.nhn
+영역은 [요일별 전체 웹툰]
+요일 / 웹툰제목 / 관련 URL 
+예) 월요일 참교육 https://comic.naver.com/webtoon/ ...
+
+
+
+# 네이버 영화 댓글
+댓글 한페이지
+댓글 5페이지
+댓글 전체페이지
+https://movie.naver.com/movie/point/af/list.naver?st=mcode&sword=167697&target=after&page=1
+
+
+# 퀴즈 : YES24 국내도서 종합 베스트셀러 정보
+http://www.yes24.com/24/Category/BestSeller?CategoryNumber=001&sumgb=06&PageNumber=1
+
+
+book_print(시작페이지, 마지막페이지) 형태로 함수를 호출하면 
+데이타프레임 형태로 출력되도록 한다. 
+
+저장되는 요소는? 책제목, 저자, 출판사, 출판날짜, 가격, URL
+
+예) book_print(1, 5) 호출시 
+   1~5페이지까지 데이타프레임을 출력
+
+
+# ================================
+# Selenium을 이용한 동적 컨텐츠 수집
+원격으로 웹페이지 소스를 활용하기 위한 라이브러리
+동적컨텐츠 수집에 주로 사용
+작업환경 : 크롬 + 셀레니움용 웹드라이버 설치
+주의사항 : 크롬 버전과 웹드라이버 버전이 일치
+
+설치 과정
+
+1) 크롬 웹브라우저 버전 확인 
+ 1시방향 옵션 버튼 클릭 후 [도움말]-[Chrome 정보] 확인 
+ 버전은? 예)94.0
+2) 크롬 웹브라우저에 맞는 드라이버 파일 다운로드 
+ https://chromedriver.chromium.org/downloads
+
+ 윈도우용인 경우 :   chromedriver_win32.zip
+
+ 쥬피터노트북 파일이 있는 폴더에 압축해제한다. 
+ chromedriver.exe 파일이 있는지 확인 
+3) 셀레니움 설치 
+ pip list 로 selenium 이 있는지 확인
+
+
+
+# 구글 검색엔진에서 검색어 결과 저장하기
+
+# 1) 관련 모듈 임포트 
+import pandas as pd
+import time
+from selenium import webdriver
+# from selenium.webdriver.chrome.service import Service
+# 2) 셀레니움 드라이버 객체 생성 
+
+# 윈도우용 잘 안될때 다른 방법
+# from selenium.webdriver.chrome.service import Service
+# driver = webdriver.Chrome(service=Service('chromedriver.exe'))
+
+
+# 윈도우용
+driver = webdriver.Chrome('chromedriver.exe')
+
+
+# 3) 지연시간 지정 후에 웹브라우저 주소로 이동 
+time.sleep(6)
+
+url = 'http://www.google.com'
+driver.get(url)
+
+# 결과적으로 크롬웹브라우저가 자동으로 실행된다. 
+# 4) 구글 검색창에 검색어를 입력하고 결과 페이지를 출력하기 
+# find_element_by_name(name속성값)
+# 동작은?
+# send_keys(키워드) : 텍스트필드에 값을 입력하는 이벤트 
+# click() => 선택자 요소 클릭 
+# submit() => 전송이벤트 
+
+time.sleep(2)
+
+driver.find_element_by_name('q').send_keys('파이썬')
+driver.find_element_by_name('q').submit()
+# 5) 지연시간 후에 웹브라우저 닫기 
+
+time.sleep(5)
+driver.close()
+# 경고 메세지 출력 X
+import warnings
+warnings.filterwarnings(action='ignore')
+# 다시 나오게하려면 
+# warnings.filterwarnings(action='default')
+
+
+# 선택자로 찾기 
+find_elements_by_css_selector(선택자) => 리스트로 반환
+find_element_by_css_selector(선택자) => 첫번째 선택자에 해당하는 것만 반환
+.text => 문자열 반환
+.get_attribute(속성) => 속성에 해당하는 값이 반환
+

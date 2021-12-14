@@ -1,0 +1,277 @@
+// HTML 버전
+- 웹페이지의 컨텐츠(이미지, 텍스트, 하이퍼링크, 테이블...)의 마크업언어
+- HTML 4
+- XHTML
+- HTML 5
+
+// HTML5 태그 특징
+- 대소문자는 상관없다. 소문자 권장
+- 구조
+  <태그명> .... </태그명> : 짝이 있는 구조
+  <태그명>, <태그명 /> : 단독 태그
+
+- 태그명안에 들어가는 요소
+  <태그명 [속성='값']>
+
+  <a href='http://www.google.com'>구글로 이동하기</a>
+
+// HTML5 태그
+주석 <!-- 주석내용 -->
+
+// Emmet 코딩 방식으로 HTML 입력하기
+태그명1+태그명2... [ctrl+spaceBar]
+태그명*3 [ctrl+spaceBar]]  반복
+$ 자동숫자증감
+{} 내용입력
+() 그룹핑
+[] 속성 
+
+
+// h1 ~ h6
+ : 글자가 진하게
+ : 숫자가 클수록 글자가 작아진다.
+ : heading
+
+p : 문단생성
+  : paragraph
+
+ul>li : 목록문단
+ol>li : 순서목록문단
+
+ul: unordered list
+ol: ordered list
+li : list
+
+dl>dt+dd : 정의문단
+dl : definition list
+dt : definition title
+dd : definition data
+
+br: 줄바꿈 
+break line 
+<br> 또는 <br />
+
+
+hr: 수평선 
+horizontal rule 
+<hr> 또는 <hr />
+
+
+blockquote
+인용문에 사용 
+들여쓰기되어 앞뒤에 여백 생성 
+
+
+em / i  
+=> 기울임꼴 
+인라인요소 
+
+strong / b  
+=> 진하게 
+인라인요소 
+
+
+img
+image 
+<img src=이미지경로 alt=대체텍스트 > 
+<img src=이미지경로 alt=대체텍스트 />
+src = source
+alt = alternate text : 이미지 대신 나오는 글자 
+width/height/border 
+인라인 요소 
+
+웹이미지 => 웹에 사용되는 이미지 
+png, jpg, gif
+svg(벡터)  
+
+
+a : anchor
+파일(html, 이미지, 웹상주소)과 연결기능 
+인라인요소 
+
+텍스트 하이퍼링크 
+<a href='URL'> 글자  </a>
+
+이미지 하이퍼링크 
+<a href='URL'> 
+	<img src=이미지경로 atl=대체텍스트>
+</a>
+
+
+a의 속성들
+  href - 연결주소(html, http://~)
+  target - _blank : 새탭에 주소가 표시된다. 
+  title - 하이퍼링크 툴팁기능 
+
+ 
+table 
+  table>tr>td
+  table>tr>th
+ 
+tr : table row  - 행 
+td : table data - 셀 
+th : table head - 제목셀, 글내용이 중앙정렬, 진하게표시
+
+관련속성들... 
+border : 테두리 
+width / height : 가로 세로 크기 
+cellpadding : 셀 안쪽여백 
+cellspacing : 셀과 셀 사이 여백 
+align : 가로 정렬 center/right/left
+valign : 셀의 세로 정렬 top/middle/bottom
+bordercolor: 테두리 색상 
+bgcolor : 배경 색상
+ 
+
+셀합치기 
+colspan : 가로합치기 
+rowspan : 세로합치기 
+주의사항: 셀을 합치고 나머지는 삭제하거나 주석처리한다.
+
+<퀴즈 - 테이블 셀 합치기 >
+pdf
+
+
+form 문서 : 로그인, 회원가입, 게시판, 주문서....
+
+폼구성요소 
+- 라벨 / 필드셋 / 레전드 
+- 입력상자 / 암호상자 / 여러줄글상자 
+- 체크박스 / 라디오버튼 / 폼버튼(제출, 리셋) 
+
+form>폼구성요소 
+action :
+ 제출버튼을 클릭하면 연결되는 URL
+
+label 
+ : 텍스트필드에 제목을 달아주는 역할 
+ for: 텍스트필드의 아이디값과 연결 
+
+input:text
+텍스트필드 
+:한줄 글상자 
+
+<label for="userID">아이디</label>
+<input type="text" name="" id="userID">
+
+input:password
+암호텍스트필드 
+암호글상자 
+
+
+textarea
+여러줄글상자 
+cols : 가로글자갯수
+rows : 세로줄수
+
+
+input:file 
+파일첨부상자 
+
+
+fieldset>legend{제목}
+그룹핑 
+사각테두리 생성 
+제목은 legend로 설정 
+
+
+input:radio
+같은 그룹에서 하나만 선택
+주의사항은 같은 그룹안의 다른 아이템에서 
+name 값이 동일
+
+checked : 초기상태가 선택된 상태로 표시 
+<label for="male">남자</label>
+<input type="radio" name="gender" id="male" checked>
+<label for="female">여자</label>
+<input type="radio" name="gender" id="female">
+
+
+input:checkbox
+같은 그룹에서 여러개 선택 가능 
+checked : 초기상태가 선택된 상태로 표시 
+
+<label for="hobby1">영화 감상</label>
+        <input type="checkbox" name="" id="hobby1" checked>
+        <label for="hobby2">낚시</label><input type="checkbox" name="" id="hobby2">
+        <label for="hobby3">요리</label><input type="checkbox" name="" id="hobby3">
+        <label for="hobby4">게임</label><input type="checkbox" name="" id="hobby4">
+
+
+드롭다운메뉴=셀렉트메뉴 
+적은공간에서 많은 아이템을 사용해야 할경우 사용 
+
+select>option*3
+
+<select name="" id="job">
+        <option>-- 선택해주세요 --</option>
+        <option value="">학생</option>
+        <option value="">회사원</option>
+        <option value="">자영업</option>
+        <option value="">기타</option>
+</select>
+
+
+전송버튼 = submit
+
+button{전송}
+input:submit
+
+form의 action에 지정한 URL로 이동 
+ 
+<button>전송</button>
+
+
+취소버튼 : 폼문서의 초기화 
+input:reset
+
+HTML5 폼요소 
+
+input:search 
+input:color 
+input:date
+input:time
+input:email 
+=> 유효성검사 
+입력란에 @ 확인 
+
+
+input:url => 유효성검사 
+=> 유효성검사 
+입력란에 웹사이트주소인지 확인 
+
+퀴즈 - 폼문서 만들기 
+ 슬라이드 65 / 66
+
+--------------
+아이프레임(iframe/floating Frame)이란?
+- 별도의 웹페이지나 동영상무비등을 
+  이미지나 글처럼 현재 삽입하는 기능 
+- 인라인요소 
+
+iframe[name=iframe width=500 width=300 src=]
+
+아이프레임으로 연결페이지 표시하기 
+<a href="URL" target=아이프레임이름>메뉴텍스트</a>
+
+
+-- 레이아웃과 관련된 태그 
+  : CSS 디자인과 관련된 태그 
+
+div
+division 
+
+span
+인라인요소(글자)의 일부를 꾸미는 용도 
+
+HTML5의 시맨틱태그들 
+- header
+- footer
+- aside
+- nav
+- section
+- article 
+
+
+
+
